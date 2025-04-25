@@ -71,12 +71,6 @@ if (isset($_GET['remove'])) {
                     $total += $subtotal;
             ?>
             <tr>
-<tr>
-    <td colspan="5" class="text-end">
-        <button id="rzp-button1" class="btn btn-primary">Pay with Razorpay</button>
-    </td>
-</tr>
-
                 <td><?= htmlspecialchars($item['name']) ?></td>
                 <td>₹<?= number_format($item['price']) ?></td>
                 <td><?= $item['quantity'] ?></td>
@@ -91,28 +85,26 @@ if (isset($_GET['remove'])) {
         </tbody>
     </table>
     <a href="index.html" class="btn btn-secondary">Continue Shopping</a>
-    <a href="checkout.php" class="btn btn-success">Checkout</a>
+    <!-- Payment Button -->
+    <button id="rzp-button1" class="btn btn-primary">Pay with Razorpay</button>
     <?php else: ?>
         <p>Your cart is empty.</p>
         <a href="index.html" class="btn btn-primary">Shop Now</a>
     <?php endif; ?>
 </div>
 
-</body>
-</html>
-
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
     var options = {
-        "key": "YOUR_RAZORPAY_KEY_ID", // Replace with your Razorpay key ID
-        "amount": <?= $total * 100 ?>, // Razorpay works in paise
+        "key": "rzp_test_Hg9tQMvhGyPjKf", // Replace with your Razorpay key ID
+        "amount": <?= $total * 100 ?>, // Razorpay works in paise (multiply total by 100)
         "currency": "INR",
         "name": "Your Saree Store",
         "description": "Payment for your order",
-        "image": "https://yourdomain.com/logo.png",
-        "handler": function (response){
+        "image": "https://yourdomain.com/logo.png", // Replace with your logo URL
+        "handler": function (response) {
             alert("Payment successful! Razorpay Payment ID: " + response.razorpay_payment_id);
-            // Redirect to success page or save to database
+            // You can redirect to a success page or save payment details to your database here
             window.location.href = "payment_success.php?payment_id=" + response.razorpay_payment_id;
         },
         "prefill": {
@@ -124,12 +116,13 @@ if (isset($_GET['remove'])) {
             "color": "#F37254"
         }
     };
+
     var rzp1 = new Razorpay(options);
-    document.getElementById('rzp-button1').onclick = function(e){
+    document.getElementById('rzp-button1').onclick = function (e) {
         rzp1.open();
         e.preventDefault();
     }
 </script>
 
-
-
+</body>
+</html>
